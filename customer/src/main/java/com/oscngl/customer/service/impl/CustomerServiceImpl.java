@@ -1,5 +1,7 @@
 package com.oscngl.customer.service.impl;
 
+import com.oscngl.clients.notification.NotificationClient;
+import com.oscngl.clients.notification.NotificationRequest;
 import com.oscngl.clients.subscription.SubscriptionClient;
 import com.oscngl.customer.exception.EntityAlreadyExistsException;
 import com.oscngl.customer.exception.EntityNotFoundException;
@@ -10,17 +12,20 @@ import com.oscngl.customer.request.CustomerRequest;
 import com.oscngl.customer.response.CustomerResponse;
 import com.oscngl.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final SubscriptionClient subscriptionClient;
+    private final NotificationClient notificationClient;
 
     @Override
     public List<CustomerResponse> getCustomers() {
@@ -52,9 +57,15 @@ public class CustomerServiceImpl implements CustomerService {
         if(!response) {
             throw new EntityNotFoundException("Customer is not subscribed with email: " + customerRequest.getEmail());
         }
-        return CustomerMapper.INSTANCE
-                .customerToResponse(customerRepository.save(CustomerMapper.INSTANCE
-                        .requestToCustomer(customerRequest)));
+        Customer customer = CustomerMapper.INSTANCE.requestToCustomer(customerRequest);
+        log.info("CUSTOMER AFTER MAP: "+customer.toString());
+        notificationClient.sendNotification(
+                new NotificationRequest(
+                        customer.getEmail(),
+                        "Hi " + customer.getFirstName() + ", welcome to my Microservice..."
+                )
+        );
+        return CustomerMapper.INSTANCE.customerToResponse(customerRepository.save(customer));
     }
 
     @Override
