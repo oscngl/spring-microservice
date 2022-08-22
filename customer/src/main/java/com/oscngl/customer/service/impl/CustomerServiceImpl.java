@@ -1,5 +1,6 @@
 package com.oscngl.customer.service.impl;
 
+import com.oscngl.clients.subscription.SubscriptionClient;
 import com.oscngl.customer.exception.EntityAlreadyExistsException;
 import com.oscngl.customer.exception.EntityNotFoundException;
 import com.oscngl.customer.mapper.CustomerMapper;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final SubscriptionClient subscriptionClient;
 
     @Override
     public List<CustomerResponse> getCustomers() {
@@ -45,6 +47,10 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> customerByEmail = customerRepository.findByEmail(customerRequest.getEmail());
         if(customerByEmail.isPresent()) {
             throw new EntityAlreadyExistsException("Customer already exists with email: " + customerRequest.getEmail());
+        }
+        boolean response = subscriptionClient.isSubscribe(customerRequest.getEmail());
+        if(!response) {
+            throw new EntityNotFoundException("Customer is not subscribed with email: " + customerRequest.getEmail());
         }
         return CustomerMapper.INSTANCE
                 .customerToResponse(customerRepository.save(CustomerMapper.INSTANCE
