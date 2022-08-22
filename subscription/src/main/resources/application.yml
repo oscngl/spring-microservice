@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: subscription
+
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: microservice-subscription
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        format_sql: true
+
+    show-sql: true

@@ -11,6 +11,7 @@
 
     <modules>
         <module>customer</module>
+        <module>subscription</module>
     </modules>
 
     <name>spring-microservice</name>
