@@ -1,6 +1,6 @@
 package com.oscngl.customer.service.impl;
 
-import com.oscngl.clients.notification.NotificationClient;
+import com.oscngl.amqp.RabbitMQMessageProducer;
 import com.oscngl.clients.notification.NotificationRequest;
 import com.oscngl.clients.subscription.SubscriptionClient;
 import com.oscngl.customer.exception.EntityAlreadyExistsException;
@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final SubscriptionClient subscriptionClient;
-    private final NotificationClient notificationClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     @Override
     public List<CustomerResponse> getCustomers() {
@@ -58,13 +58,16 @@ public class CustomerServiceImpl implements CustomerService {
             throw new EntityNotFoundException("Customer is not subscribed with email: " + customerRequest.getEmail());
         }
         Customer customer = CustomerMapper.INSTANCE.requestToCustomer(customerRequest);
-        log.info("CUSTOMER AFTER MAP: "+customer.toString());
-        notificationClient.sendNotification(
-                new NotificationRequest(
-                        customer.getEmail(),
-                        "Hi " + customer.getFirstName() + ", welcome to my Microservice..."
-                )
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getEmail(),
+                "Hi " + customer.getFirstName() + ", welcome to my Microservice..."
         );
+        rabbitMQMessageProducer.publish(
+                notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
+        log.info("Customer created: " + customer);
         return CustomerMapper.INSTANCE.customerToResponse(customerRepository.save(customer));
     }
 

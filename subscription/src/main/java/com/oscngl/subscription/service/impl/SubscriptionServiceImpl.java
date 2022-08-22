@@ -9,11 +9,13 @@ import com.oscngl.subscription.request.SubscriptionRequest;
 import com.oscngl.subscription.service.SequenceGeneratorService;
 import com.oscngl.subscription.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -46,6 +48,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
         Subscription subscription = SubscriptionMapper.INSTANCE.requestToSubscription(subscriptionRequest);
         subscription.setId(sequenceGeneratorService.generateSequence(Subscription.SEQUENCE_NAME));
+        log.info("Customer subscribed with email: " + subscriptionRequest.getCustomerEmail());
         return subscriptionRepository.save(subscription);
     }
 
