@@ -12,5 +12,6 @@ public interface SubscriptionService {
     Subscription getSubscriptionByEmail(String customerEmail);
     Subscription createSubscription(SubscriptionRequest subscriptionRequest);
     void deleteSubscriptionByEmail(String customerEmail);
+    boolean isSubscribe(String customerEmail);
 
 }

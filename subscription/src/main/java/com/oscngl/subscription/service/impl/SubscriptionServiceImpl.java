@@ -58,4 +58,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscriptionRepository.deleteById(subscriptionByEmail.get().getId());
     }
 
+    @Override
+    public boolean isSubscribe(String customerEmail) {
+        Optional<Subscription> subscriptionByEmail = subscriptionRepository.findByCustomerEmail(customerEmail);
+        if(subscriptionByEmail.isPresent()) {
+            return true;
+        }
+        SubscriptionRequest request = new SubscriptionRequest(customerEmail);
+        createSubscription(request);
+        return true;
+    }
+
 }

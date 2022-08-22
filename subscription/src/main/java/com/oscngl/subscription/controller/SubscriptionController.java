@@ -44,4 +44,9 @@ public class SubscriptionController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/subscribe/{email}")
+    public ResponseEntity<Boolean> isSubscribe(@PathVariable("email") String customerEmail) {
+        return new ResponseEntity<>(subscriptionService.isSubscribe(customerEmail), HttpStatus.OK);
+    }
+
 }
