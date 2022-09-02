@@ -1,8 +1,9 @@
 ## Microservice Application with Spring Boot
-### - RabbitMQ
 ### - Eureka Server
+### - API Gateway
+### - RabbitMQ
+### - Sleuth & Zipkin
 ### - Spring Cloud
 ### - Spring Boot
 ### - MongoDB
 ### - PostgreSQL
-### - Sleuth & Zipkin
