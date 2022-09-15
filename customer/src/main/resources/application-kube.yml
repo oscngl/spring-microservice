@@ -1,41 +1,24 @@
 server:
-  port: 8081
-
+  port: 8080
 spring:
   application:
-    name: subscription
-
-  data:
-    mongodb:
-      host: 127.0.0.1
-      port: 27017
-      database: microservice-subscription
-
+    name: customer
+  datasource:
+    password: root
+    url: jdbc:postgresql://postgres:5432/customer
+    username: postgres
   jpa:
     hibernate:
       ddl-auto: update
-
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
     show-sql: true
-
   zipkin:
     base-url: http://zipkin:9411
-
-  boot:
-    admin:
-      client:
-        url: http://admin-server:8508
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-
+  rabbitmq:
+    addresses: rabbitmq:5672
 eureka:
   client:
     service-url:

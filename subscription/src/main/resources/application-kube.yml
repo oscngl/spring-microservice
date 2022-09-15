@@ -1,40 +1,23 @@
 server:
   port: 8081
-
 spring:
   application:
-    name: subscription
-
+    name: fraud
   data:
     mongodb:
       host: 127.0.0.1
       port: 27017
       database: microservice-subscription
-
   jpa:
     hibernate:
-      ddl-auto: update
-
+      ddl-auto: create-drop
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-
     show-sql: true
-
   zipkin:
     base-url: http://zipkin:9411
-
-  boot:
-    admin:
-      client:
-        url: http://admin-server:8508
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
 
 eureka:
   client:
