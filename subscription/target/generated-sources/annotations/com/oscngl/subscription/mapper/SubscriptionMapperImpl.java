@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-08-22T22:30:42+0300",
+    date = "2022-09-02T16:13:26+0300",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -23,8 +23,6 @@ public class SubscriptionMapperImpl implements SubscriptionMapper {
 
         Subscription subscription = new Subscription();
 
-        subscription.setCustomerEmail( subscriptionRequest.getCustomerEmail() );
-
         return subscription;
     }
 
@@ -35,8 +33,6 @@ public class SubscriptionMapperImpl implements SubscriptionMapper {
         }
 
         SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-
-        subscriptionRequest.setCustomerEmail( subscription.getCustomerEmail() );
 
         return subscriptionRequest;
     }
